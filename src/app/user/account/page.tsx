@@ -2,14 +2,12 @@
 'use client'; // This page needs client-side interactivity
 
 import React, { FC, useState, useEffect } from 'react';
-import PrivateLayout from '../../../../src/components/PrivateLayout'; // Adjusted path
 import { useAuth } from '@/hooks/useAuth'; // Adjusted path
 import { getUserProfile, updateUserProfile, updateUserEmail, updateUserPassword } from '@/api/users'; // Adjusted path
 import { UserProfileDto, UpdateUserProfileDto, UpdateEmailDto, UpdatePasswordDto } from '@/types';
 import {Button, Card, Divider, Flex, Form, Input, Modal, notification, NotificationArgsProps, Space, Spin} from "antd"; // Adjusted path
 type NotificationPlacement = NotificationArgsProps['placement'];
 import { Typography } from 'antd';
-import {offset} from "antd/es/tree/utils/dropIndicator";
 
 const { Title } = Typography;
 

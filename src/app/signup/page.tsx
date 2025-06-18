@@ -16,7 +16,6 @@ const SignUpPage: FC = () => {
     // const [confirmPassword, setConfirmPassword] = useState('');
     // const [phoneNumber, setPhoneNumber] = useState(''); // Maps to No_Telp (Field E)
     // const [address, setAddress] = useState(''); // Maps to Alamat (Field F)
-    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const { login: authLogin } = useAuth();
     const router = useRouter();
@@ -33,16 +32,13 @@ const SignUpPage: FC = () => {
     const onFinish : FormProps<FieldType>["onFinish"] = async (values) => {
         console.log('Received values of form: ', values);
         const {name, email, password,confirmPassword, phoneNumber, address} = values;
-        setError(null);
         setLoading(true);
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match.');
             setLoading(false);
             return;
         }
         if (password.length < 6) {
-            setError('Password must be at least 6 characters long.');
             setLoading(false);
             return;
         }
@@ -61,9 +57,8 @@ const SignUpPage: FC = () => {
 
             alert(`Sign Up Successful! Welcome, ${response.name}!`); // Using alert for notifications
             router.push('/user/dashboard'); // New users are typically regular users
-        } catch (err: any) {
-            setError(err.message || 'An unexpected error occurred.');
-            alert(`Sign Up Failed: ${err.message || 'An unexpected error occurred.'}`);
+        } catch (err: unknown) {
+            alert(`Sign Up Failed: ${(err as Error).message || 'An unexpected error occurred.'}`);
         } finally {
             setLoading(false);
         }

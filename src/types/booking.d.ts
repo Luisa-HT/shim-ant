@@ -3,12 +3,12 @@
 export interface CreateBookingRequestDto {
     start_Date: string; // DateTime in C# -> string (ISO 8601)
     end_Date: string;   // DateTime in C# -> string (ISO 8601)
-    deskripsi?: string; // Reason for booking
+    deskripsi: string; // Reason for booking
     id_Barang: number;
 }
 
 export interface BookingHistoryDto { // For user's history
-    id_Peminjaman: number;
+    id_Peminjaman: string;
     start_Date: string;
     end_Date: string;
     deskripsi?: string;
@@ -22,34 +22,34 @@ export interface BookingHistoryDto { // For user's history
 }
 
 export interface AdminBookingRequestDto { // For admin viewing pending requests
-    id_Peminjaman: number;
+    id_Peminjaman: string;
     start_Date: string;
     end_Date: string;
     deskripsi?: string;
     status_Peminjaman: string;
     nama_Barang: string;
-    id_Barang: number;
+    id_Barang: string;
     nama_Peminjam: string;
-    id_Peminjam: number;
+    id_Peminjam: string;
     peminjam_Email: string;
     peminjam_No_Telp?: string;
     tanggal_Pengajuan?: string; // Assumed column in peminjaman table
 }
 
 export interface AdminBookingHistoryDto { // For admin viewing all history
-    id_Peminjaman: number;
+    id_Peminjaman: string;
     start_Date: string;
     end_Date: string;
     deskripsi?: string;
     status_Peminjaman: string;
     nama_Barang: string;
-    id_Barang: number;
+    id_Barang: string;
     nama_Peminjam: string;
-    id_Peminjam: number;
+    id_Peminjam: string;
     nama_Admin?: string; // Admin who processed (approved/declined)
-    id_Admin?: number; // Assumed column in peminjaman table
+    id_Admin?: string; // Assumed column in peminjaman table
     nama_Admin_Pengembalian?: string; // Admin who processed return
-    id_Admin_Pengembalian?: number; // Assumed column in peminjaman table
+    id_Admin_Pengembalian?: string; // Assumed column in peminjaman table
     denda?: number;
     alasan_Penolakan?: string;
     tanggal_Pengajuan?: string;

@@ -1,6 +1,6 @@
 // ClientApp/src/api/admin.ts
 import axios from 'axios';
-import type {AdminProfileDto, UpdateAdminProfileDto, UpdateEmailDto, UpdatePasswordDto} from '../types';
+import type {AdminProfileDto, UpdateAdminProfileDto, UpdateEmailDto, UpdatePasswordDto} from '@/types';
 
 const API_BASE_URL = '/api/admin'; // Specific route for admin profile management
 
@@ -20,7 +20,7 @@ export const getAdminProfile = async (): Promise<AdminProfileDto> => {
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch admin profile.');
         }
@@ -38,7 +38,7 @@ export const updateAdminProfile = async (profileData: UpdateAdminProfileDto): Pr
         await axios.put(`${API_BASE_URL}/profile`, profileData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to update admin profile.');
         }
@@ -56,7 +56,7 @@ export const updateAdminEmail = async (emailData: UpdateEmailDto): Promise<void>
         await axios.put(`${API_BASE_URL}/profile/email`, emailData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to update admin email.');
         }
@@ -74,7 +74,7 @@ export const updateAdminPassword = async (passwordData: UpdatePasswordDto): Prom
         await axios.put(`${API_BASE_URL}/profile/password`, passwordData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to update admin password.');
         }

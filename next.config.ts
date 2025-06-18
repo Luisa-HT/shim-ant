@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
     reactStrictMode: true,
     // Add images domain if you plan to use external image hosts with Next.js Image component
     // images: {

@@ -1,13 +1,14 @@
 // src/components/PrivateLayout.tsx
 'use client'; // This component needs client-side interactivity
 
-import React, {createContext, FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode} from 'react';
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import TopBar from "@/components/topBar";
 import {Layout, theme} from "antd";
 import Sidebar from "@/components/sidebar";
-import {Content} from "antd/es/layout/layout"; // To check if user is authenticated at all
+import {Content} from "antd/es/layout/layout";
+import {useRouter} from "next/navigation"; // To check if user is authenticated at all
 
 interface PrivateLayoutProps {
     children: ReactNode;
@@ -15,13 +16,10 @@ interface PrivateLayoutProps {
 
 
 const PrivateLayout: FC<PrivateLayoutProps> = ({ children }) => {
-    const [collapsed, setCollapsed] = useState(false);
     const { isAuthenticated, isLoading, user } = useAuth(); // Check authentication state
 
+    const router = useRouter();
 
-    const handleCollapse = (isCollapsed: boolean) => {
-        setCollapsed(isCollapsed);
-    };
 
     // If not authenticated or still loading, don't render the private layout.
     // The parent layout (e.g., admin/layout.tsx or a future user/layout.tsx)
@@ -33,6 +31,8 @@ const PrivateLayout: FC<PrivateLayoutProps> = ({ children }) => {
         token: {colorBgContainer, borderRadiusLG},
     } = theme.useToken();
 
+    if(!isLoading && !isAuthenticated)
+        router.push('/login');
 
     return (
         <Layout style={{minHeight: "100vh"}}>

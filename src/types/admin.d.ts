@@ -1,7 +1,7 @@
 // ClientApp/src/types/admin.d.ts
 
 export interface AdminProfileDto {
-    id_Admin: number;
+    id_Admin: string;
     nama_Admin: string;
     email: string;
     no_Telp?: string;

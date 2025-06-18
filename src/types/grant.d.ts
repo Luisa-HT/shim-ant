@@ -1,7 +1,7 @@
 // ClientApp/src/types/grant.d.ts
 
 export interface HibahDto {
-    id_Hibah: number;
+    id_Hibah: string;
     nama_Hibah: string;
     keterangan?: string;
     tahun?: number; // smallint in C# maps to number | undefined
