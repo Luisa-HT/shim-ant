@@ -7,7 +7,7 @@ import type {
     UpdateBarangStatusDto,
     PaginationParams,
     PaginatedResponse
-} from '../types';
+} from '@/types';
 
 const API_BASE_URL = '/api/inventory';
 
@@ -30,7 +30,7 @@ export const getAvailableInventory = async (
             params, // Axios automatically serializes params to query string
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch available inventory.');
         }
@@ -52,7 +52,7 @@ export const getAllInventory = async (
             params,
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch all inventory.');
         }
@@ -71,7 +71,7 @@ export const getInventoryItemById = async (id: number): Promise<BarangDto> => {
             headers: getAuthHeader(), // Accessible by both User and Admin
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to fetch inventory item with ID ${id}.`);
         }
@@ -90,7 +90,7 @@ export const createInventoryItem = async (itemData: CreateBarangDto): Promise<Ba
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to create inventory item.');
         }
@@ -109,7 +109,7 @@ export const updateInventoryItem = async (id: number, itemData: UpdateBarangDto)
         await axios.put(`${API_BASE_URL}/${id}`, itemData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to update inventory item with ID ${id}.`);
         }
@@ -128,7 +128,7 @@ export const updateInventoryItemStatus = async (id: number, statusData: UpdateBa
         await axios.put(`${API_BASE_URL}/${id}/status`, statusData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to update status for item with ID ${id}.`);
         }
@@ -146,7 +146,7 @@ export const deleteInventoryItem = async (id: number): Promise<void> => {
         await axios.delete(`${API_BASE_URL}/${id}`, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to delete inventory item with ID ${id}.`);
         }

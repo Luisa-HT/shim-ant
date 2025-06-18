@@ -1,9 +1,8 @@
 "use client"
-import {Flex, Layout, Menu, MenuProps} from "antd";
+import {Flex, Menu, MenuProps} from "antd";
 import {Header} from "antd/es/layout/layout";
 import React from "react";
-import {AppstoreOutlined, InfoCircleOutlined, MailOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons";
-import {justifyContentValues} from "antd/es/flex/utils";
+import { InfoCircleOutlined, UserOutlined} from "@ant-design/icons";
 
 
 

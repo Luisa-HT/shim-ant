@@ -3,8 +3,6 @@
 
 import React, { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
-import PrivateLayout from '@/components/privateLayout'; // Adjusted path
-import { useAuth } from '@/hooks/useAuth'; // Adjusted path
 import { getMyBookingHistory } from '@/api/bookings'; // Adjusted path
 import { BookingHistoryDto, PaginatedResponse, PaginationParams } from '@/types'; // Adjusted path
 import { formatDateTime, formatRupiah } from '@/utils/helpers';
@@ -13,7 +11,6 @@ import StatusTag from "@/components/statusTag";
 
 const { Title } = Typography;
 const UserDashboardPage: FC = () => {
-    const { user } = useAuth();
     const [bookingHistory, setBookingHistory] = useState<BookingHistoryDto[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -27,7 +24,8 @@ const UserDashboardPage: FC = () => {
             try {
                 const response: PaginatedResponse<BookingHistoryDto> = await getMyBookingHistory(pagination);
                 setBookingHistory(response.items);
-            } catch (err: any) {
+            } catch (asyncErr: unknown) {
+                const err = asyncErr as Error;
                 setError(err.message || 'Failed to fetch booking history.');
                 alert(`Error: ${err.message || 'Failed to fetch booking history.'}`);
             } finally {

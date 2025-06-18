@@ -17,7 +17,7 @@ export interface PaginatedResponse<T> {
 }
 
 // Generic API response structure for success/error messages
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = never> {
     success: boolean;
     message?: string;
     data?: T;

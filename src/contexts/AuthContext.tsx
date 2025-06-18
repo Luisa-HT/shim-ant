@@ -2,7 +2,7 @@
 'use client'; // This directive marks the component as a Client Component
 
 import React, { createContext, useState, useEffect, FC, ReactNode } from 'react';
-import { LoginResponseDto } from '../types'; // Import LoginResponseDto
+import { LoginResponseDto } from '@/types'; // Import LoginResponseDto
 
 // Define the shape of the AuthContext value
 interface AuthContextType {

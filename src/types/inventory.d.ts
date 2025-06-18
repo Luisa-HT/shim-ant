@@ -1,14 +1,14 @@
 // ClientApp/src/types/inventory.d.ts
 
 export interface BarangDto {
-    id_Barang: number;
+    id_Barang: string;
     nama_Barang: string;
     deskripsi_Barang?: string;
     status_Kondisi?: string; // e.g., "Good", "Damaged"
     status_Barang: string;   // e.g., "Available", "Booked", "Maintenance", "Tersedia"
     tanggal_Perolehan: string; // Date represented as string (ISO 8601)
     harga_Barang?: number;    // long? in C# maps to number | undefined
-    id_Hibah?: number;        // Foreign key to hibah table
+    id_Hibah?: string;        // Foreign key to hibah table
     nama_Hibah?: string;      // ADDED: For display purposes, derived from join with hibah table
     latest_Booking_Date?: string; // DateTime? in C# maps to string | undefined
 }

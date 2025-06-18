@@ -1,7 +1,7 @@
 // ClientApp/src/types/user.d.ts
 
 export interface UserProfileDto {
-    id_Peminjam: number;
+    id_Peminjam: string;
     nama_Peminjam: string;
     email: string;
     no_Telp?: string;

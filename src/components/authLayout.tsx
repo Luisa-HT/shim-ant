@@ -2,9 +2,8 @@
 'use client'; // This component needs client-side interactivity for navigation
 
 import React, { FC, ReactNode } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import {Col, Flex, Layout, Row, theme} from "antd";
+
+import {Layout, theme} from "antd";
 import PublicTopBar from "@/components/publicTopBar";
 import {Content} from "antd/es/layout/layout"; // For active link styling
 

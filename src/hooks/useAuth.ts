@@ -1,9 +1,9 @@
 // src/hooks/useAuth.ts
 'use client'; // This directive marks the hook as part of a Client Component bundle
 
-import { useState, useEffect, useContext, useCallback } from 'react';
-import { AuthContext } from '../contexts/AuthContext'; // Assuming AuthContext exists
-import { LoginResponseDto } from '../types'; // Import LoginResponseDto from types index
+import { useEffect, useContext, useCallback } from 'react';
+import { AuthContext } from '@/contexts/AuthContext'; // Assuming AuthContext exists
+import { LoginResponseDto } from '@/types'; // Import LoginResponseDto from types index
 
 // Define the shape of the authentication hook's return value
 interface AuthHook {

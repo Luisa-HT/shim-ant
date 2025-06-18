@@ -10,7 +10,7 @@ import type {
     CompleteBookingDto,
     PaginationParams,
     PaginatedResponse,
-} from '../types';
+} from '@/types';
 
 const API_BASE_URL = '/api/bookings';
 
@@ -30,7 +30,7 @@ export const createBooking = async (bookingData: CreateBookingRequestDto): Promi
         await axios.post(`${API_BASE_URL}`, bookingData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to create booking request.');
         }
@@ -52,7 +52,7 @@ export const getMyBookingHistory = async (
             params,
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch user booking history.');
         }
@@ -70,7 +70,7 @@ export const getAdminDashboardStats = async (): Promise<AdminDashboardStatsDto> 
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch admin dashboard stats.');
         }
@@ -92,7 +92,7 @@ export const getPendingBookingRequests = async (
             params,
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch pending booking requests.');
         }
@@ -111,7 +111,7 @@ export const getAdminBookingRequestById = async (id: number): Promise<AdminBooki
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to fetch booking request with ID ${id}.`);
         }
@@ -129,7 +129,7 @@ export const approveBooking = async (id: number): Promise<void> => {
         await axios.put(`${API_BASE_URL}/admin/${id}/approve`, {}, { // Empty body for PUT
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to approve booking request with ID ${id}.`);
         }
@@ -148,7 +148,7 @@ export const declineBooking = async (id: number, declineData: DeclineBookingDto)
         await axios.put(`${API_BASE_URL}/admin/${id}/decline`, declineData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to decline booking request with ID ${id}.`);
         }
@@ -167,7 +167,7 @@ export const completeBooking = async (id: number, completeData: CompleteBookingD
         await axios.put(`${API_BASE_URL}/admin/${id}/complete`, completeData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to complete booking with ID ${id}.`);
         }
@@ -189,7 +189,7 @@ export const getAllBookingHistory = async (
             params,
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch all booking history.');
         }

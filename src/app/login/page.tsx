@@ -2,18 +2,15 @@
 'use client'; // This page needs client-side interactivity
 
 import React, { FC, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AuthLayout from '@/components/authLayout'; // Adjusted path for App Router
 import { login as apiLogin } from '@/api/auth'; // Adjusted path
 import { useAuth } from '@/hooks/useAuth';
 import {Button, Card, Form, FormProps, Input, Spin} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import {Content} from "antd/es/layout/layout"; // Adjusted path
 
 const LoginPage: FC = () => {
 
-    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const { login: authLogin } = useAuth();
     const router = useRouter();
@@ -25,7 +22,6 @@ const LoginPage: FC = () => {
 
     const onFinish: FormProps<FieldType>['onFinish'] = async ({email, password}) => {
         console.log('Success:', {email, password});
-        setError(null);
         setLoading(true);
 
         try {
@@ -39,9 +35,8 @@ const LoginPage: FC = () => {
             } else {
                 router.push('/user/dashboard');
             }
-        } catch (err: any) {
-            setError(err.message || 'An unexpected error occurred.');
-            alert(`Login Failed: ${err.message || 'An unexpected error occurred.'}`);
+        } catch (err: unknown) {
+            alert(`Login Failed: ${(err as Error).message || 'An unexpected error occurred.'}`);
         } finally {
             setLoading(false);
         }

@@ -1,8 +1,7 @@
 "use client"
-import {AuthProvider} from "@/contexts/AuthContext";
-import {AntdRegistry} from "@ant-design/nextjs-registry";
-import privateLayout from "@/components/privateLayout";
+
 import PrivateLayout from "@/components/privateLayout";
+import React from "react";
 
 export default function UserLayout({
                                        children,

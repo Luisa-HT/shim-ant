@@ -1,16 +1,13 @@
 "use client"
-import {Button, Flex, Layout, Menu, MenuProps} from "antd";
+import {Button, Flex,  Menu, MenuProps} from "antd";
 import {Header} from "antd/es/layout/layout";
 import React from "react";
 import {
-    AppstoreOutlined, ContactsOutlined,
+ ContactsOutlined,
     HomeOutlined,
     InfoCircleOutlined,
-    MailOutlined,
-    SettingOutlined,
-    UserOutlined
+
 } from "@ant-design/icons";
-import {justifyContentValues} from "antd/es/flex/utils";
 
 const items: MenuProps['items'] = [
     {

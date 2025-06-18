@@ -1,6 +1,6 @@
 // ClientApp/src/api/auth.ts
 import axios from 'axios'; // Assuming axios is installed: npm install axios
-import type {LoginRequestDto, LoginResponseDto, SignUpRequestDto, ApiResponse} from '../types';
+import type {LoginRequestDto, LoginResponseDto, SignUpRequestDto} from '@/types';
 
 // Base URL for your backend API
 const API_BASE_URL = '/api/auth'; // Relative path, ASP.NET Core proxy will handle it
@@ -14,7 +14,7 @@ export const login = async (loginData: LoginRequestDto): Promise<LoginResponseDt
     try {
         const response = await axios.post<LoginResponseDto>(`${API_BASE_URL}/login`, loginData);
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         // It's good practice to normalize API error responses
         if (axios.isAxiosError(error) && error.response) {
             // Backend returns { message: "..." } for errors
@@ -34,7 +34,7 @@ export const signup = async (signupData: SignUpRequestDto): Promise<LoginRespons
         // Backend returns LoginResponseDto on successful signup (auto-login)
         const response = await axios.post<LoginResponseDto>(`${API_BASE_URL}/signup`, signupData);
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Sign up failed due to an unexpected error.');
         }

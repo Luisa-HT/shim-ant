@@ -1,6 +1,6 @@
 // ClientApp/src/api/users.ts
 import axios from 'axios';
-import type {UserProfileDto, UpdateUserProfileDto, UpdateEmailDto, UpdatePasswordDto} from '../types';
+import type {UserProfileDto, UpdateUserProfileDto, UpdateEmailDto, UpdatePasswordDto} from '@/types';
 
 const API_BASE_URL = '/api/users';
 
@@ -20,7 +20,7 @@ export const getUserProfile = async (): Promise<UserProfileDto> => {
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch user profile.');
         }
@@ -38,7 +38,7 @@ export const updateUserProfile = async (profileData: UpdateUserProfileDto): Prom
         await axios.put(`${API_BASE_URL}/profile`, profileData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to update user profile.');
         }
@@ -56,7 +56,7 @@ export const updateUserEmail = async (emailData: UpdateEmailDto): Promise<void> 
         await axios.put(`${API_BASE_URL}/profile/email`, emailData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to update user email.');
         }
@@ -74,7 +74,7 @@ export const updateUserPassword = async (passwordData: UpdatePasswordDto): Promi
         await axios.put(`${API_BASE_URL}/profile/password`, passwordData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to update user password.');
         }

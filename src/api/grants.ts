@@ -1,6 +1,6 @@
 // ClientApp/src/api/grants.ts
 import axios from 'axios';
-import type { HibahDto, CreateHibahDto, UpdateHibahDto, PaginationParams, PaginatedResponse } from '../types';
+import type { HibahDto, CreateHibahDto, UpdateHibahDto, PaginationParams, PaginatedResponse } from '@/types';
 
 const API_BASE_URL = '/api/grants';
 
@@ -22,7 +22,7 @@ export const getAllGrants = async (params: PaginationParams): Promise<PaginatedR
             params,
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch grants.');
         }
@@ -41,7 +41,7 @@ export const getGrantById = async (id: number): Promise<HibahDto> => {
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to fetch grant with ID ${id}.`);
         }
@@ -60,7 +60,7 @@ export const createGrant = async (grantData: CreateHibahDto): Promise<HibahDto> 
             headers: getAuthHeader(),
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || 'Failed to create grant.');
         }
@@ -79,7 +79,7 @@ export const updateGrant = async (id: number, grantData: UpdateHibahDto): Promis
         await axios.put(`${API_BASE_URL}/${id}`, grantData, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to update grant with ID ${id}.`);
         }
@@ -97,7 +97,7 @@ export const deleteGrant = async (id: number): Promise<void> => {
         await axios.delete(`${API_BASE_URL}/${id}`, {
             headers: getAuthHeader(),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message || `Failed to delete grant with ID ${id}.`);
         }
