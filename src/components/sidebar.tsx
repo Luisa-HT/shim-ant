@@ -30,11 +30,11 @@ const MenuData: MenuProps['items'] = [
         label: "Booking",
         children: [
             {
-                key: "/user/make",
+                key: "/user/bookings/make",
                 icon: React.createElement(FormOutlined), label: "Make A Booking"
             },
             {
-                key: "/user/history",
+                key: "/user/bookings/history",
                 icon: React.createElement(HistoryOutlined), label: "Booking History"
             }]
     },

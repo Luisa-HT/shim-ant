@@ -10,12 +10,12 @@ import { SignUpRequestDto } from '@/types';
 import {Button, Card, Form, FormProps, Input, Spin} from "antd"; // Adjusted path
 
 const SignUpPage: FC = () => {
-    // const [name, setName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-    // const [confirmPassword, setConfirmPassword] = useState('');
-    // const [phoneNumber, setPhoneNumber] = useState(''); // Maps to No_Telp (Field E)
-    // const [address, setAddress] = useState(''); // Maps to Alamat (Field F)
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(''); // Maps to No_Telp (Field E)
+    const [address, setAddress] = useState(''); // Maps to Alamat (Field F)
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const { login: authLogin } = useAuth();
@@ -113,7 +113,9 @@ const SignUpPage: FC = () => {
                         ]}
                         hasFeedback
                     >
-                        <Input/>
+                        <Input
+                        onChange={x => setName(x.target.value)}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="email"
@@ -129,7 +131,10 @@ const SignUpPage: FC = () => {
                             },
                         ]}
                     >
-                        <Input/>
+                        <Input
+                            onChange={x => setEmail(x.target.value)}
+
+                        />
                     </Form.Item>
 
                     <Form.Item
@@ -143,11 +148,13 @@ const SignUpPage: FC = () => {
                         ]}
                         hasFeedback
                     >
-                        <Input.Password/>
+                        <Input.Password
+                            onChange={x => setPassword(x.target.value)}
+                        />
                     </Form.Item>
 
                     <Form.Item
-                        name="confirm"
+                        name="confirmPassword"
                         label="Confirm Password"
                         dependencies={['password']}
                         hasFeedback
@@ -166,7 +173,9 @@ const SignUpPage: FC = () => {
                             }),
                         ]}
                     >
-                        <Input.Password/>
+                        <Input.Password
+                            onChange={x => setConfirmPassword(x.target.value)}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="phoneNumber"
@@ -179,7 +188,9 @@ const SignUpPage: FC = () => {
                         ]}
                         hasFeedback
                     >
-                        <Input/>
+                        <Input
+                            onChange={x => setPhoneNumber(x.target.value)}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="address"
@@ -192,7 +203,9 @@ const SignUpPage: FC = () => {
                         ]}
                         hasFeedback
                     >
-                        <Input/>
+                        <Input
+                            onChange={x => setAddress(x.target.value)}
+                        />
                     </Form.Item>
                     <Form.Item
                         {...tailFormItemLayout}>

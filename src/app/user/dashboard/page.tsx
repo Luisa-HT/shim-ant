@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth'; // Adjusted path
 import { getMyBookingHistory } from '@/api/bookings'; // Adjusted path
 import { BookingHistoryDto, PaginatedResponse, PaginationParams } from '@/types'; // Adjusted path
 import { formatDateTime, formatRupiah } from '@/utils/helpers';
-import {Spin, Table, Typography, TableProps} from "antd";
+import {Spin, Table, Typography, TableProps, Empty} from "antd";
 import StatusTag from "@/components/statusTag";
 
 const { Title } = Typography;
@@ -87,8 +87,15 @@ const UserDashboardPage: FC = () => {
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : bookingHistory.length === 0 ? (
-                    <p className="text-gray-600">No recent bookings found.</p>
+                    <Empty
+                        description={
+                            <Typography.Text>
+                                No recent bookings found.
+                            </Typography.Text>
+                    }
+                    > </Empty>
                 ) : (
+                    <div>
                     <div className="overflow-x-auto">
                     <Table
 
@@ -98,12 +105,14 @@ const UserDashboardPage: FC = () => {
                         rowKey="id_Peminjaman"
                         pagination={false}/>
                     </div>
-                )}
-                <div className="text-right mt-4">
+                    <div className="text-right mt-4">
                     <Link href="/user/bookings/history" className="text-blue-600 hover:underline">
-                        View All Booking History
+                    View All Booking History
                     </Link>
-                </div>
+                    </div>
+                    </div>
+                )}
+
             </div>
         </div>
     );
