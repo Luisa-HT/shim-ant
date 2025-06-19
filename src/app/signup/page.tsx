@@ -3,7 +3,7 @@
 
 import React, { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthLayout from '@/components/authLayout'; // Adjusted path
+import AuthLayout from '@/components/AuthLayout'; // Adjusted path
 import { signup as apiSignup } from '@/api/auth'; // Adjusted path
 import { useAuth } from '@/hooks/useAuth'; // Adjusted path
 import { SignUpRequestDto } from '@/types';

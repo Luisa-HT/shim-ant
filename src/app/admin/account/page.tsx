@@ -2,11 +2,10 @@
 'use client'; // This page needs client-side interactivity
 
 import React, { FC, useState, useEffect } from 'react';
-import PrivateLayout from '@/components/PrivateLayout'; // Adjusted path
-import LoadingSpinner from '@/components/LoadingSpinner'; // Adjusted path
 import { useAuth } from '@/hooks/useAuth'; // Adjusted path
 import { getAdminProfile, updateAdminProfile, updateAdminEmail, updateAdminPassword } from '@/api/admin'; // Adjusted path
-import { AdminProfileDto, UpdateAdminProfileDto, UpdateEmailDto, UpdatePasswordDto } from '@/types'; // Adjusted path
+import { AdminProfileDto, UpdateAdminProfileDto, UpdateEmailDto, UpdatePasswordDto } from '@/types';
+import {notification, Spin} from "antd"; // Adjusted path
 
 const AdminAccountPage: FC = () => {
     const { user, login: authLogin } = useAuth();
@@ -24,6 +23,29 @@ const AdminAccountPage: FC = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+    const [message, setMessage] = useState('');
+    const [description, setDescription] = useState('');
+    const [showNotification, setShowNotification] = useState(false);
+
+    const [api, contextHolder] = notification.useNotification();
+    const openNotification = (placement: NotificationPlacement, message: string, description: string) => {
+        console.log(message);
+        setMessage(message);
+        setDescription(description);
+        setShowNotification(true);
+    };
+    useEffect(() => {
+        if (showNotification)
+            api.info({
+                message: message,
+                description: description,
+                placement: 'top',
+            });
+        setMessage('')
+        setDescription('')
+        setShowNotification(false)
+    }, [message, description, showNotification, api]);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -130,7 +152,7 @@ const AdminAccountPage: FC = () => {
     };
 
     if (loading || !profile) {
-        return <LoadingSpinner fullscreen />;
+        return <Spin fullscreen />;
     }
 
     return (
@@ -330,7 +352,7 @@ const AdminAccountPage: FC = () => {
                     </div>
                 </div>
             )}
-            {loading && <LoadingSpinner fullscreen />}
+            {loading && <Spin fullscreen />}
         </div>
     );
 };

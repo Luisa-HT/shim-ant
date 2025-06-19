@@ -4,9 +4,9 @@
 import React, {FC, ReactNode} from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import TopBar from "@/components/topBar";
+import TopBar from "@/components/TopBar";
 import {Layout, theme} from "antd";
-import Sidebar from "@/components/sidebar";
+import SideBar from "@/components/SideBar";
 import {Content} from "antd/es/layout/layout";
 import {useRouter} from "next/navigation"; // To check if user is authenticated at all
 
@@ -38,7 +38,7 @@ const PrivateLayout: FC<PrivateLayoutProps> = ({ children }) => {
         <Layout style={{minHeight: "100vh"}}>
             <TopBar nameProp={user ? user.name : "Name"}></TopBar>
             <Layout style={{height: "100%"}}>
-                <Sidebar></Sidebar>
+                <SideBar></SideBar>
                 <Layout style={{padding: '24px 24px 24px'}}>
 
                     <Content

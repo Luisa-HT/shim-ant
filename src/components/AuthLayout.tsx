@@ -4,7 +4,7 @@
 import React, { FC, ReactNode } from 'react';
 
 import {Layout, theme} from "antd";
-import PublicTopBar from "@/components/publicTopBar";
+import PublicTopBar from "@/components/PublicTopBar";
 import {Content} from "antd/es/layout/layout"; // For active link styling
 
 interface AuthLayoutProps {

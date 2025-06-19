@@ -4,12 +4,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import LoadingSpinner from '@/components/LoadingSpinner'; // Adjusted path
 import StatusTag from '@/components/StatusTag'; // Adjusted path
 import { useAuth } from '@/hooks/useAuth'; // Adjusted path
 import { getAdminDashboardStats, getPendingBookingRequests, getAllBookingHistory, approveBooking, declineBooking } from '@/api/bookings'; // Added approve/decline APIs
 import { AdminDashboardStatsDto, AdminBookingRequestDto, AdminBookingHistoryDto, PaginationParams, PaginatedResponse, DeclineBookingDto } from '@/types'; // Added DeclineBookingDto
-import { formatDateTime } from '@/utils/helpers'; // Adjusted path
+import { formatDateTime } from '@/utils/helpers';
+import {Spin} from "antd"; // Adjusted path
 
 const AdminDashboardPage: FC = () => {
     const { user } = useAuth();
@@ -56,7 +56,7 @@ const AdminDashboardPage: FC = () => {
         fetchDashboardData();
     }, []);
 
-    const handleApprove = async (id: number) => {
+    const handleApprove = async (id: string) => {
         setActionLoading(true);
         setError(null);
         try {
@@ -113,15 +113,15 @@ const AdminDashboardPage: FC = () => {
                 <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
                     <h2 className="text-lg font-medium text-gray-600">Pending Requests</h2>
                     {loadingStats ? (
-                        <LoadingSpinner size="small" />
+                        <Spin size="small" />
                     ) : (
                         <p className="text-4xl font-bold text-yellow-600 mt-2">{stats?.pendingCount || 0}</p>
                     )}
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
-                    <h2 className="text-lg font-medium text-gray-600">Today's Bookings</h2>
+                    <h2 className="text-lg font-medium text-gray-600">Today&#39;s Bookings</h2>
                     {loadingStats ? (
-                        <LoadingSpinner size="small" />
+                        <Spin size="small" />
                     ) : (
                         <p className="text-4xl font-bold text-blue-600 mt-2">{stats?.todaysBookingsCount || 0}</p>
                     )}
@@ -133,7 +133,7 @@ const AdminDashboardPage: FC = () => {
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Pending Requests</h2>
                 {loadingPending ? (
-                    <LoadingSpinner />
+                    <Spin />
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : pendingRequests.length === 0 ? (
@@ -185,7 +185,7 @@ const AdminDashboardPage: FC = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Bookings</h2>
                 {(loadingRecent || actionLoading) ? (
-                    <LoadingSpinner />
+                    <Spin />
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : recentBookings.length === 0 ? (
@@ -266,7 +266,7 @@ const AdminDashboardPage: FC = () => {
                     </div>
                 </div>
             )}
-            {(loadingStats || loadingPending || loadingRecent || actionLoading) && <LoadingSpinner fullscreen />}
+            {(loadingStats || loadingPending || loadingRecent || actionLoading) && <Spin fullscreen />}
         </div>
     );
 };

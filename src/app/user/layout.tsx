@@ -1,6 +1,6 @@
 "use client"
 
-import PrivateLayout from "@/components/privateLayout";
+import PrivateLayout from "@/components/PrivateLayout";
 import React from "react";
 
 export default function UserLayout({

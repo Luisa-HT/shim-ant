@@ -3,7 +3,7 @@
 
 import React, { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthLayout from '@/components/authLayout'; // Adjusted path for App Router
+import AuthLayout from '@/components/AuthLayout'; // Adjusted path for App Router
 import { login as apiLogin } from '@/api/auth'; // Adjusted path
 import { useAuth } from '@/hooks/useAuth';
 import {Button, Card, Form, FormProps, Input, Spin} from "antd";

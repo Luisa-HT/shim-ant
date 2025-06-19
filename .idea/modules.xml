@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/shim-ant.iml" filepath="$PROJECT_DIR$/.idea/shim-ant.iml" />
+      <module fileurl="file://$USER_HOME$/RiderProjects/SHIM-new/shim.client/shim.nextjs/.idea/shim.nextjs.iml" filepath="$USER_HOME$/RiderProjects/SHIM-new/shim.client/shim.nextjs/.idea/shim.nextjs.iml" />
     </modules>
   </component>
 </project>

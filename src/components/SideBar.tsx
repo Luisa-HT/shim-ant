@@ -40,7 +40,7 @@ const MenuData: MenuProps['items'] = [
     },
 ]
 
-export default function Sidebar() {
+export default function SideBar() {
     const {
         token: {colorBgContainer},
     } = theme.useToken();

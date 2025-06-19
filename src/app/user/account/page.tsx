@@ -35,11 +35,13 @@ const UserAccountPage: FC = () => {
     const [message, setMessage] = useState('');
     const [description, setDescription] = useState('');
     const [showNotification, setShowNotification] = useState(false);
+    const [placement, setPlacement] = useState<NotificationPlacement>('top');
 
     const openNotification = (placement: NotificationPlacement, message: string, description: string) => {
         console.log(message);
         setMessage(message);
         setDescription(description);
+        setPlacement(placement);
         setShowNotification(true);
     };
     useEffect(() => {
@@ -47,10 +49,11 @@ const UserAccountPage: FC = () => {
             api.info({
                 message: message,
                 description: description,
-                placement: 'top',
+                placement,
             });
         setMessage('')
         setDescription('')
+        setPlacement('top')
         setShowNotification(false)
     }, [message, description, showNotification, api]);
 

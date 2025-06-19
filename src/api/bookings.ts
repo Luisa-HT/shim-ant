@@ -87,7 +87,7 @@ export const getPendingBookingRequests = async (
     params: PaginationParams
 ): Promise<PaginatedResponse<AdminBookingRequestDto>> => {
     try {
-        const response = await axios.get<PaginatedResponse<AdminBookingRequestDto>>(`${API_BASE_URL}/admin/pending`, {
+        const response = await axios.get<PaginatedResponse<AdminBookingRequestDto>>(`${API_BASE_URL}/admin/requests/pending`, {
             headers: getAuthHeader(),
             params,
         });
@@ -124,9 +124,9 @@ export const getAdminBookingRequestById = async (id: number): Promise<AdminBooki
  * @param id - The ID of the booking request to approve.
  * @returns A promise that resolves on success.
  */
-export const approveBooking = async (id: number): Promise<void> => {
+export const approveBooking = async (id: string): Promise<void> => {
     try {
-        await axios.put(`${API_BASE_URL}/admin/${id}/approve`, {}, { // Empty body for PUT
+        await axios.put(`${API_BASE_URL}/admin/requests/${id}/approve`, {}, { // Empty body for PUT
             headers: getAuthHeader(),
         });
     } catch (error: unknown) {
@@ -143,9 +143,9 @@ export const approveBooking = async (id: number): Promise<void> => {
  * @param declineData - The reason for decline.
  * @returns A promise that resolves on success.
  */
-export const declineBooking = async (id: number, declineData: DeclineBookingDto): Promise<void> => {
+export const declineBooking = async (id: string, declineData: DeclineBookingDto): Promise<void> => {
     try {
-        await axios.put(`${API_BASE_URL}/admin/${id}/decline`, declineData, {
+        await axios.put(`${API_BASE_URL}/admin/requests/${id}/decline`, declineData, {
             headers: getAuthHeader(),
         });
     } catch (error: unknown) {
@@ -164,7 +164,7 @@ export const declineBooking = async (id: number, declineData: DeclineBookingDto)
  */
 export const completeBooking = async (id: number, completeData: CompleteBookingDto): Promise<void> => {
     try {
-        await axios.put(`${API_BASE_URL}/admin/${id}/complete`, completeData, {
+        await axios.put(`${API_BASE_URL}/admin/requests/${id}/complete`, completeData, {
             headers: getAuthHeader(),
         });
     } catch (error: unknown) {
@@ -184,7 +184,7 @@ export const getAllBookingHistory = async (
     params: PaginationParams
 ): Promise<PaginatedResponse<AdminBookingHistoryDto>> => {
     try {
-        const response = await axios.get<PaginatedResponse<AdminBookingHistoryDto>>(`${API_BASE_URL}/admin/all`, {
+        const response = await axios.get<PaginatedResponse<AdminBookingHistoryDto>>(`${API_BASE_URL}/admin/requests/all`, {
             headers: getAuthHeader(),
             params,
         });

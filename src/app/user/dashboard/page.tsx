@@ -7,7 +7,7 @@ import { getMyBookingHistory } from '@/api/bookings'; // Adjusted path
 import { BookingHistoryDto, PaginatedResponse, PaginationParams } from '@/types'; // Adjusted path
 import { formatDateTime, formatRupiah } from '@/utils/helpers';
 import {Spin, Table, Typography, TableProps, Empty} from "antd";
-import StatusTag from "@/components/statusTag";
+import StatusTag from "@/components/StatusTag";
 
 const { Title } = Typography;
 const UserDashboardPage: FC = () => {
