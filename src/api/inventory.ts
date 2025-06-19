@@ -27,6 +27,7 @@ export const getAvailableInventory = async (
 ): Promise<PaginatedResponse<BarangDto>> => {
     try {
         const response = await axios.get<PaginatedResponse<BarangDto>>(`${API_BASE_URL}`, {
+            headers: getAuthHeader(),
             params, // Axios automatically serializes params to query string
         });
         return response.data;

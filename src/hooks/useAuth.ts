@@ -29,6 +29,7 @@ export const useAuth = (): AuthHook => {
 
     const login = useCallback((token: string, userId: string, name: string, email: string, role: 'User' | 'Admin') => {
         const userData: LoginResponseDto = { token, userId, name, email, role };
+        console.log(userData);
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
         setIsLoading(false);
