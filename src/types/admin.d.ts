@@ -11,5 +11,6 @@ export interface AdminProfileDto {
 export interface UpdateAdminProfileDto {
     nama_Admin?: string;
     no_Telp?: string;
+    email?: string;
     // Fields like 'Status', 'Institute', 'Studies' from design are NOT in DB schema and thus not in this DTO.
 }

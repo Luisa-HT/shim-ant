@@ -40,7 +40,7 @@ export const updateUserProfile = async (profileData: UpdateUserProfileDto): Prom
         });
     } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message || 'Failed to update user profile.');
+            throw new Error(error.response.data.message || 'Failed to update profile.');
         }
         throw new Error('Network error or unexpected issue during profile update.');
     }

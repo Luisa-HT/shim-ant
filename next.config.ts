@@ -14,40 +14,40 @@ const nextConfig: NextConfig = {
                 // or HTTP port 5000/5001 if not HTTPS.
                 // You might need to adjust the target based on your backend's actual URL.
                 source: '/api/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/api/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/api/:path*`,
             },
             // Add other backend-related paths if your backend serves them directly
             {
                 source: '/_configuration/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/_configuration/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/_configuration/:path*`,
             },
             {
                 source: '/.well-known/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/.well-known/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/.well-known/:path*`,
             },
             {
                 source: '/Identity/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/Identity/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/Identity/:path*`,
             },
             {
                 source: '/connect/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/connect/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/connect/:path*`,
             },
             {
                 source: '/_framework/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/_framework/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/_framework/:path*`,
             },
             {
                 source: '/_vs/browserLink/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/_vs/browserLink/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/_vs/browserLink/:path*`,
             },
             {
                 source: '/_host/:path*',
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/_host/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/_host/:path*`,
             },
             {
                 source: '/WeatherForecast/:path*', // Example endpoint from default template, remove if not needed
-                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.5:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.5:5000'}/WeatherForecast/:path*`,
+                destination: `${process.env.ASPNETCORE_HTTPS_PORT ? `https://192.168.0.20:${process.env.ASPNETCORE_HTTPS_PORT}` : 'http://192.168.0.20:5000'}/WeatherForecast/:path*`,
             },
         ];
     },

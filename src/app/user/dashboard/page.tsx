@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { getMyBookingHistory } from '@/api/bookings'; // Adjusted path
 import { BookingHistoryDto, PaginatedResponse, PaginationParams } from '@/types'; // Adjusted path
 import { formatDateTime, formatRupiah } from '@/utils/helpers';
-import {Spin, Table, Typography, TableProps, Empty} from "antd";
+import {Spin, Table, Typography, TableProps, Empty, Button} from "antd";
 import StatusTag from "@/components/StatusTag";
 
 const { Title } = Typography;
@@ -38,13 +38,13 @@ const UserDashboardPage: FC = () => {
 
     const  columns : TableProps<BookingHistoryDto>['columns']=[
         {
-            title : 'Item Name',
+            title : 'ITEM NAME',
             dataIndex : 'nama_Barang',
             key: 'nama_Barang',
         },
 
         {
-            title : 'Time of Booking',
+            title : 'TIME OF BOOKING',
             key: 'timeofBooking',
             render: (_, record) => (
                 <span>
@@ -54,22 +54,22 @@ const UserDashboardPage: FC = () => {
         },
 
         {
-            title : 'Status',
+            title : 'STATUS',
             dataIndex : 'status_Peminjaman',
             key: 'status_Peminjaman',
             render: (status) => <StatusTag status={status ?? ""} />,
         },
 
         {
-            title : 'Action',
+            title : 'ACTION',
             key: 'action',
             render: (_, record) => (
-                <button
+                <Button
+                    type="link"
                     onClick={() => alert(`Viewing details for booking ID: ${record.id_Peminjaman}\nReason: ${record.deskripsi || 'N/A'}\nFine: ${formatRupiah(record.denda)}`)}
-                    className="text-blue-600 hover:underline text-sm bg-transparent border-none p-0 cursor-pointer"
                 >
                     View Details
-                </button>
+                </Button>
             ),
         }
     ];
@@ -104,9 +104,14 @@ const UserDashboardPage: FC = () => {
                         pagination={false}/>
                     </div>
                     <div className="text-right mt-4">
-                    <Link href="/user/bookings/history" className="text-blue-600 hover:underline">
-                    View All Booking History
-                    </Link>
+
+                        <Button
+                        href="/user/bookings/history"
+                        type="link"
+                        >
+                            View All Booking History
+
+                        </Button>
                     </div>
                     </div>
                 )}

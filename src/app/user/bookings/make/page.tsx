@@ -7,7 +7,7 @@ import PrivateLayout from '@/components/PrivateLayout'; // Adjusted path
 import { createBooking } from '@/api/bookings'; // Adjusted path
 import { getAvailableInventory } from '@/api/inventory'; // Adjusted path
 import { CreateBookingRequestDto, BarangDto, PaginationParams, PaginatedResponse } from '@/types';
-import {Button, Cascader, DatePicker, Form, Input, Select, Spin} from "antd";
+import {Button, Cascader, DatePicker, Form, Input, Select, Space, Spin} from "antd";
 import {Typography} from 'antd';
 import TextArea from "antd/es/input/TextArea";
 
@@ -91,6 +91,12 @@ const MakeBookingPage: FC = () => {
 
                 <Form.Item
                     label="Item"
+                    name="item"
+                    rules={[{
+                        required: true,
+                        message: 'Please select an item.',
+                    },
+                    ]}
                 >
                     <Select
                     options={itemOptions}
@@ -98,27 +104,30 @@ const MakeBookingPage: FC = () => {
                     onChange={(e) => setSelectedItem(e)}
                     />
                 </Form.Item>
-                <Form.Item label="Date & Time">
-                <Form.Item
-                    style={{display: 'inline-block', width: '100%'}}
-                    // label="Start Date & Time"
+                <Form.Item label={"Time & Date"}
+                           name="timeDate"
+                           rules={[
+                               {
+                               required: true,
+                               message: 'Please select the time and date of your booking.',
+                           },
+                           ]}
                 >
-                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"
-                    onChange={(e) => setStartDate(e.toISOString())}
-                    />
-                </Form.Item>
-                <Form.Item
-                    // label="End Date & Time"
-                    style={{display: 'inline-block', width: '100%'}}
-
-                >
-                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"
-                                onChange={(e) => setEndDate(e.toISOString())}
-                    />
-                </Form.Item>
+                        <DatePicker.RangePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '50%' }}
+                                                onChange={(x, f) => {
+                                                    setStartDate(f[0]);
+                                                    setEndDate(f[1]);
+                                                }}
+                        />
                 </Form.Item>
                 <Form.Item
                 label="Reason"
+                name="reason"
+                rules={[{
+                    required: true,
+                    message: 'Please input the reason for your booking.',
+                },
+                ]}
                 >
                     <Input.TextArea onChange={(e) => setReason(e.target.value)}/>
 

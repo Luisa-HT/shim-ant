@@ -1,20 +1,34 @@
-// src/app/admin/account/page.tsx
+// src/app/user/account/page.tsx
 'use client'; // This page needs client-side interactivity
 
-import React, { FC, useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth'; // Adjusted path
-import { getAdminProfile, updateAdminProfile, updateAdminEmail, updateAdminPassword } from '@/api/admin'; // Adjusted path
-import { AdminProfileDto, UpdateAdminProfileDto, UpdateEmailDto, UpdatePasswordDto } from '@/types';
-import {notification, Spin} from "antd"; // Adjusted path
+import React, {FC, useState, useEffect} from 'react';
+import {useAuth} from '@/hooks/useAuth'; // Adjusted path
+import {getUserProfile, updateUserProfile, updateUserEmail, updateUserPassword} from '@/api/users'; // Adjusted path
+import {
+    UserProfileDto,
+    UpdateUserProfileDto,
+    UpdateEmailDto,
+    UpdatePasswordDto,
+    UpdateAdminProfileDto,
+    AdminProfileDto
+} from '@/types';
+import {Button, Card, Divider, Flex, Form, Input, Modal, notification, NotificationArgsProps, Space, Spin} from "antd"; // Adjusted path
+type NotificationPlacement = NotificationArgsProps['placement'];
+import {Typography} from 'antd';
+import {getAdminProfile, updateAdminEmail, updateAdminPassword, updateAdminProfile} from "@/api";
 
-const AdminAccountPage: FC = () => {
-    const { user, login: authLogin } = useAuth();
+const {Title} = Typography;
+
+const UserAccountPage: FC = () => {
+    const {user, login: authLogin} = useAuth();
     const [profile, setProfile] = useState<AdminProfileDto | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [editMode, setEditMode] = useState(false);
-    const [emailModalVisible, setEmailModalVisible] = useState(false);
+    const [editMode, setEditMode] = useState(false); // State to toggle edit mode for profile fields
+    const [emailModalVisible, setEmailModalVisible] = useState(true);
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+
 
     // State for form inputs
     const [name, setName] = useState('');
@@ -23,16 +37,18 @@ const AdminAccountPage: FC = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [api, contextHolder] = notification.useNotification();
 
     const [message, setMessage] = useState('');
     const [description, setDescription] = useState('');
     const [showNotification, setShowNotification] = useState(false);
+    const [placement, setPlacement] = useState<NotificationPlacement>('top');
 
-    const [api, contextHolder] = notification.useNotification();
     const openNotification = (placement: NotificationPlacement, message: string, description: string) => {
         console.log(message);
         setMessage(message);
         setDescription(description);
+        setPlacement(placement);
         setShowNotification(true);
     };
     useEffect(() => {
@@ -40,10 +56,11 @@ const AdminAccountPage: FC = () => {
             api.info({
                 message: message,
                 description: description,
-                placement: 'top',
+                placement,
             });
         setMessage('')
         setDescription('')
+        setPlacement('top')
         setShowNotification(false)
     }, [message, description, showNotification, api]);
 
@@ -56,21 +73,24 @@ const AdminAccountPage: FC = () => {
                 setProfile(fetchedProfile);
                 setName(fetchedProfile.nama_Admin);
                 setPhone(fetchedProfile.no_Telp || '');
+                setNewEmail(fetchedProfile.email || '');
             } catch (err: any) {
-                setError(err.message || 'Failed to fetch admin profile.');
-                alert(`Error: ${err.message || 'Failed to fetch admin profile.'}`);
+                setError(err.message || 'Failed to fetch user profile.');
+                // alert(`Error: ${err.message || 'Failed to fetch user profile.'}`);
+                openNotification("top", 'Error: ', err.message || 'Failed to fetch user profile.');
             } finally {
                 setLoading(false);
             }
         };
 
-        if (user && user.role === 'Admin') {
+        if (user) {
             fetchProfile();
         }
     }, [user]);
 
+
     const handleProfileUpdate = async (e: React.FormEvent) => {
-        e.preventDefault();
+        console.log('sucess');
         setLoading(true);
         setError(null);
         try {
@@ -78,59 +98,51 @@ const AdminAccountPage: FC = () => {
                 nama_Admin: name,
                 no_Telp: phone || undefined,
             };
+
+            if (user) {
+                const {email} = user;
+                if (email !== newEmail) {
+                    const emailUpdateData: UpdateEmailDto = {newEmail};
+                    await updateAdminEmail(emailUpdateData);
+                    // alert('Email Updated: Your email address has been successfully updated. You may need to re-login.');
+                }
+
+            }
             await updateAdminProfile(updateData);
-            alert('Profile Updated: Your admin profile information has been successfully updated.');
+            // alert('Profile Updated: Your profile information has been successfully updated.');
+            openNotification('top', 'Profile Updated:', 'Your profile information has been successfully updated.')
             setEditMode(false);
             if (profile) {
-                setProfile({ ...profile, ...updateData });
-                if (user && user.name !== name) {
-                    authLogin(user.token, user.userId, name, user.email, user.role);
+                setProfile({...profile, ...updateData, email: newEmail});
+                if (user && (user.name !== name || user.email !== newEmail)) {
+                    authLogin(user.token, user.userId, name, newEmail, user.role);
                 }
             }
         } catch (err: any) {
             setError(err.message || 'An unexpected error occurred.');
-            alert(`Update Failed: ${err.message || 'An unexpected error occurred.'}`);
+            openNotification('top', 'Update Failed: ', err.message || 'An unexpected error occurred.')
+            // alert(`Update Failed: ${err.message || 'An unexpected error occurred.'}`);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleEmailUpdate = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        try {
-            const updateData: UpdateEmailDto = { newEmail };
-            await updateAdminEmail(updateData);
-            alert('Email Updated: Your email address has been successfully updated. You may need to re-login.');
-            setEmailModalVisible(false);
-            if (profile && user) {
-                setProfile({ ...profile, email: newEmail });
-                authLogin(user.token, user.userId, user.name, newEmail, user.role);
-            }
-        } catch (err: any) {
-            setError(err.message || 'An unexpected error occurred.');
-            alert(`Email Update Failed: ${err.message || 'An unexpected error occurred.'}`);
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    const handlePasswordUpdate = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handlePasswordUpdate = async () => {
+        // e.preventDefault();
         setLoading(true);
         setError(null);
 
         if (newPassword !== confirmNewPassword) {
-            setError('New passwords do not match.');
+            openNotification('top', 'Error : ', 'New passwords do not match.')
             setLoading(false);
             return;
         }
-        if (newPassword.length < 6) {
-            setError('New password must be at least 6 characters long.');
-            setLoading(false);
-            return;
-        }
+        // if (newPassword.length < 6) {
+        //     openNotification('top', 'Error : ', 'New password must be at least 6 characters long.')
+        //     setLoading(false);
+        //     return;
+        // }
 
         try {
             const updateData: UpdatePasswordDto = {
@@ -138,223 +150,245 @@ const AdminAccountPage: FC = () => {
                 newPassword,
             };
             await updateAdminPassword(updateData);
-            alert('Password Updated: Your password has been successfully updated.');
+            openNotification('top', 'Password Updated: ', 'Your password has been successfully updated.')
+            // alert('Password Updated: Your password has been successfully updated.');
             setPasswordModalVisible(false);
             setCurrentPassword('');
             setNewPassword('');
             setConfirmNewPassword('');
         } catch (err: any) {
             setError(err.message || 'An unexpected error occurred.');
-            alert(`Password Update Failed: ${err.message || 'An unexpected error occurred.'}`);
+            openNotification('top', 'Password Update Failed: ', err.message || 'An unexpected error occurred.')
+            // alert(`Password Update Failed: ${err.message || 'An unexpected error occurred.'}`);
         } finally {
             setLoading(false);
         }
     };
+    // const showModal = () => {
+    //     setOpen(true);
+    // };
+
+    // const handleOk = async () => {
+    //     setConfirmLoading(true);
+    //     setTimeout(async () => {
+    //         await handlePasswordUpdate();
+    //         setPasswordModalVisible(false);
+    //         setEmailModalVisible(false);
+    //         setConfirmLoading(false);
+    //     }, 2000);
+    // };
+
+    const handleCancel = () => {
+        console.log('Clicked cancel button');
+        setPasswordModalVisible(false);
+        setEmailModalVisible(false);
+    };
 
     if (loading || !profile) {
-        return <Spin fullscreen />;
+        return <Spin fullscreen/>;
     }
 
     return (
         <div>
-            <h1 className="text-3xl font-semibold text-gray-900 mb-6">Admin Account Info</h1>
+            {contextHolder}
+            <Title level={3} type={'secondary'}>
+                Account Info
+            </Title>
+            <Space direction="vertical" size="middle" style={{display: 'flex'}}>
+                <Card
+                    title={'Personal Info'}
 
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Personal Info</h2>
-                <div className="flex flex-col space-y-4">
-                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                        <span className="font-semibold text-gray-700">Profile Picture</span>
-                        <div className="flex items-center space-x-3">
-                            <span className="text-gray-600 text-sm">A profile picture helps personalize your account</span>
-                            <div className="bg-blue-600 text-white rounded-full h-16 w-16 flex items-center justify-center text-2xl">
-                                {profile.nama_Admin ? profile.nama_Admin[0].toUpperCase() : 'A'}
-                            </div>
-                            <button
-                                className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm hover:bg-gray-300 transition-colors"
-                                onClick={() => alert('Feature Coming Soon: Profile picture upload is not yet implemented.')}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    </div>
+                >
+                    <Form
+                        onFinish={handleProfileUpdate}
+                        colon={false}
+                        labelAlign={'left'}
+                        labelCol={{span: 12}}
+                        wrapperCol={{span: 12}}
+                    >
 
-                    <form onSubmit={handleProfileUpdate} className="flex flex-col space-y-4">
-                        <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                            <label htmlFor="name-input" className="font-semibold text-gray-700 w-1/4">Name</label>
+                        <Form.Item
+                            label="Name">
                             {editMode ? (
-                                <input
-                                    type="text"
-                                    id="name-input"
-                                    className="shadow appearance-none border rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
+                                <Input
+                                    defaultValue={profile.nama_Admin}
+                                    onChange={x => {
+                                        setName(x.target.value);
+                                    }}
                                 />
                             ) : (
-                                <span className="text-gray-900 w-3/4">{profile.nama_Admin}</span>
-                            )}
-                        </div>
-
-                        {/* Status, Institute, Studies are not in backend DTO based on schema */}
-                        {/* These fields were part of the design but not the DB schema. */}
-
-                        <div className="flex justify-end pt-4">
+                                <p>{profile.nama_Admin}</p>)
+                            }
+                        </Form.Item>
+                        <Divider/>
+                        <Form.Item
+                            label="Email">
                             {editMode ? (
-                                <div className="space-x-3">
-                                    <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-blue-400" disabled={loading}>
-                                        Save
-                                    </button>
-                                    <button type="button" onClick={() => { setEditMode(false); setName(profile.nama_Admin); setPhone(profile.no_Telp || ''); }} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
-                                        Cancel
-                                    </button>
-                                </div>
+                                <Input
+                                    defaultValue={profile.email}
+                                    onChange={x => {
+                                        setNewEmail(x.target.value);
+                                    }}
+                                />
                             ) : (
-                                <button type="button" onClick={() => setEditMode(true)} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                                    Edit Personal Info
-                                </button>
-                            )}
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Contact Info</h2>
-                <div className="flex flex-col space-y-4">
-                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                        <span className="font-semibold text-gray-700 w-1/4">Email</span>
-                        <div className="flex items-center space-x-3 w-3/4">
-                            <span className="text-gray-900">{profile.email}</span>
-                            <button
-                                className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm hover:bg-gray-300 transition-colors"
-                                onClick={() => setEmailModalVisible(true)}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                        <label htmlFor="phone-input-contact" className="font-semibold text-gray-700 w-1/4">Phone</label>
-                        {editMode ? (
-                            <input
-                                type="tel"
-                                id="phone-input-contact"
-                                className="shadow appearance-none border rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
-                        ) : (
-                            <span className="text-gray-900 w-3/4">{profile.no_Telp || 'N/A'}</span>
-                        )}
-                    </div>
-                    {/* Address is not in Admin schema, so it's not displayed/editable here */}
-                    <div className="flex justify-end pt-4">
-                        <button
-                            type="button"
-                            onClick={() => setPasswordModalVisible(true)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                                <p>{profile.email}</p>
+                            )
+                            }
+                        </Form.Item>
+                        <Divider/>
+                        <Form.Item
+                            label="Phone Number"
                         >
-                            Change Password
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Email Update Modal */}
-            {emailModalVisible && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
-                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">Update Email</h3>
-                        <form onSubmit={handleEmailUpdate} className="flex flex-col space-y-4">
-                            <div className="text-left">
-                                <label htmlFor="new-email-input" className="block text-gray-700 text-sm font-bold mb-2">
-                                    New Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="new-email-input"
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                    value={newEmail}
-                                    onChange={(e) => setNewEmail(e.target.value)}
-                                    required
+                            {editMode ? (
+                                <Input
+                                    defaultValue={profile.no_Telp}
+                                    onChange={x => {
+                                        setPhone(x.target.value);
+                                    }}
                                 />
-                            </div>
-                            {error && <p className="text-red-500 text-sm">{error}</p>}
-                            <div className="flex justify-end space-x-3">
-                                <button type="button" onClick={() => setEmailModalVisible(false)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
-                                    Cancel
-                                </button>
-                                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-blue-400" disabled={loading}>
-                                    Update Email
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+                            ) : (
+                                <p>{profile.no_Telp}</p>)
+                            }
+                        </Form.Item>
+                        <Divider/>
+
+                        {editMode ? (
+                            <Flex justify={'flex-end'}>
+                                <Space.Compact>
+                                    <Button block color={'primary'}
+                                            variant={"solid"}
+                                            htmlType="submit">
+                                        Save
+                                    </Button>
+
+                                    <Button block color={'default'} onClick={() => setEditMode(false)}>
+                                        Cancel
+                                    </Button>
+                                </Space.Compact>
+                            </Flex>
+                        ) : (
+                            <Button block color={'primary'} variant={'outlined'} onClick={() => setEditMode(true)}>
+                                Edit Profile
+                            </Button>
+                        )}
+
+                    </Form>
+                </Card>
+                <Card
+                    title={'Security Settings'}
+                >
+                    <Form
+                        colon={false}
+                        labelAlign={'left'}
+                        labelCol={{span: 12}}
+                        wrapperCol={{span: 12}}
+                    >
+
+                        <Form.Item
+                            label="Password">
+                            <Button block color={'primary'} variant={'outlined'}
+                                    onClick={() => setPasswordModalVisible(true)}>
+                                Change Password
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Card>
+            </Space>
 
             {/* Password Update Modal */}
             {passwordModalVisible && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
-                        <h3 className="text-2xl font-semibold text-gray-900 mb-4">Change Password</h3>
-                        <form onSubmit={handlePasswordUpdate} className="flex flex-col space-y-4">
-                            <div className="text-left">
-                                <label htmlFor="current-password-input" className="block text-gray-700 text-sm font-bold mb-2">
-                                    Current Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="current-password-input"
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                    value={currentPassword}
-                                    onChange={(e) => setCurrentPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="text-left">
-                                <label htmlFor="new-password-input" className="block text-gray-700 text-sm font-bold mb-2">
-                                    New Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="new-password-input"
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    required
-                                    minLength={6}
-                                />
-                            </div>
-                            <div className="text-left">
-                                <label htmlFor="confirm-new-password-input" className="block text-gray-700 text-sm font-bold mb-2">
-                                    Confirm New Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="confirm-new-password-input"
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                    value={confirmNewPassword}
-                                    onChange={(e) => setConfirmNewPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            {error && <p className="text-red-500 text-sm">{error}</p>}
-                            <div className="flex justify-end space-x-3">
-                                <button type="button" onClick={() => setPasswordModalVisible(false)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
-                                    Cancel
-                                </button>
-                                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-blue-400" disabled={loading}>
-                                    Change Password
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <Modal
+                    title="Change Password"
+                    open={passwordModalVisible}
+                    // onOk={handleOk}
+                    okText="Confirm"
+                    okButtonProps={{htmlType: 'submit'}}
+                    confirmLoading={confirmLoading}
+                    onCancel={handleCancel}
+                    destroyOnHidden
+                    modalRender={(dom) => (
+                        <Form
+                            onFinish={handlePasswordUpdate}
+                            labelCol={{span: 4}}
+                            wrapperCol={{span: 20}}
+                            layout="vertical"
+
+                        >
+                            {dom}
+                        </Form>
+                    )}
+                >
+
+                    <Form.Item
+                        label="Current Password"
+                        name="currentPassword"
+                        labelCol={{span: 24}}
+                        wrapperCol={{span: 24}}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your current password!'
+                            }
+                        ]}
+                    >
+                        <Input.Password
+                            onChange={x => {setCurrentPassword(x.target.value);}}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="New Password"
+                        name="newPassword"
+                        labelCol={{span: 24}}
+                        wrapperCol={{span: 24}}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input new password!'
+                            },
+                            ({  }) => ({
+                                validator(_, value) {
+                                    if (!value || (value as string).length >= 6) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('The new password must be at least 6 characters long!'));
+                                },
+                            })
+                        ]}
+                    >
+                        <Input.Password
+                            onChange={x => {setNewPassword(x.target.value);}}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Confirm New Password"
+                        name="confirmPassword"
+                        labelCol={{span: 24}}
+                        wrapperCol={{span: 24}}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please confirm your password!',
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('newPassword') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('The new password that you entered do not match!'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password
+                            onChange={x => {setConfirmNewPassword(x.target.value);}}
+                        />
+                    </Form.Item>
+
+                </Modal>
             )}
-            {loading && <Spin fullscreen />}
+            {loading && <Spin fullscreen/>}
         </div>
     );
 };
 
-export default AdminAccountPage;
+export default UserAccountPage;

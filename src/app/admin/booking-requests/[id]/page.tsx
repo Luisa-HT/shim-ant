@@ -3,11 +3,11 @@
 
 import React, { FC, useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import LoadingSpinner from '@/components/LoadingSpinner'; // Adjusted path
 import StatusTag from '@/components/StatusTag'; // Adjusted path
 import { getAdminBookingRequestById, approveBooking, declineBooking } from '@/api/bookings'; // Adjusted path
 import { AdminBookingRequestDto, DeclineBookingDto } from '@/types'; // Adjusted path
-import { formatDateTime } from '@/utils/helpers'; // Adjusted path
+import { formatDateTime } from '@/utils/helpers';
+import {Spin} from "antd"; // Adjusted path
 
 interface BookingDetailPageProps {
     // Next.js App Router dynamic segments are passed via params
@@ -96,7 +96,7 @@ const AdminBookingRequestDetailPage: FC<BookingDetailPageProps> = () => {
     };
 
     if (loading) {
-        return <LoadingSpinner fullscreen tip="Loading booking details..." />;
+        return <Spin fullscreen tip="Loading booking details..." />;
     }
 
     if (error) {

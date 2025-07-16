@@ -2,13 +2,13 @@
 'use client'; // This page needs client-side interactivity
 
 import React, { FC, useState, useEffect } from 'react';
-import LoadingSpinner from '@/components/LoadingSpinner'; // Adjusted path
 import StatusTag from '@/components/StatusTag'; // Adjusted path
-import Pagination from '@/components/Pagination'; // Adjusted path
+// import Pagination from '@/components/Pagination'; // Adjusted path
 import { getAllBookingHistory, completeBooking } from '@/api/bookings'; // Adjusted path
 import { AdminBookingHistoryDto, PaginatedResponse, PaginationParams, CompleteBookingDto } from '@/types'; // Adjusted path
 import { formatDateTime, formatRupiah } from '@/utils/helpers';
-import {useRouter} from "next/navigation"; // Adjusted path
+import {useRouter} from "next/navigation";
+import {Spin} from "antd"; // Adjusted path
 
 const AdminBookingHistoryPage: FC = () => {
     const { push } = useRouter();
@@ -127,7 +127,7 @@ const AdminBookingHistoryPage: FC = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                     {loading ? (
-                        <tr><td colSpan={11} className="text-center py-4"><LoadingSpinner /></td></tr>
+                        <tr><td colSpan={11} className="text-center py-4"><Spin /></td></tr>
                     ) : error ? (
                         <tr><td colSpan={11} className="text-center py-4 text-red-500">{error}</td></tr>
                     ) : bookingHistory.length === 0 ? (
@@ -174,12 +174,12 @@ const AdminBookingHistoryPage: FC = () => {
                     </tbody>
                 </table>
             </div>
-            {totalRecords > 0 && (
-                <Pagination
-                    paginationData={paginatedResponseForComponent}
-                    onPageChange={handlePageChange}
-                />
-            )}
+            {/*{totalRecords > 0 && (*/}
+            {/*    <Pagination*/}
+            {/*        paginationData={paginatedResponseForComponent}*/}
+            {/*        onPageChange={handlePageChange}*/}
+            {/*    />*/}
+            {/*)}*/}
 
             {/* Detail Modal */}
             {isDetailModalVisible && selectedBooking && (
@@ -273,7 +273,7 @@ const AdminBookingHistoryPage: FC = () => {
                     </div>
                 </div>
             )}
-            {(loading || actionLoading) && <LoadingSpinner fullscreen />}
+            {(loading || actionLoading) && <Spin fullscreen />}
         </div>
     );
 };
