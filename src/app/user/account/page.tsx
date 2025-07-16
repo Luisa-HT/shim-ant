@@ -4,10 +4,25 @@
 import React, {FC, useState, useEffect} from 'react';
 import {useAuth} from '@/hooks/useAuth'; // Adjusted path
 import {getUserProfile, updateUserProfile, updateUserEmail, updateUserPassword} from '@/api/users'; // Adjusted path
-import {UserProfileDto, UpdateUserProfileDto, UpdateEmailDto, UpdatePasswordDto} from '@/types';
-import {Button, Card, Divider, Flex, Form, Input, Modal, notification, NotificationArgsProps, Space, Spin} from "antd"; // Adjusted path
+import {UserProfileDto, UpdateUserProfileDto, UpdateEmailDto, UpdatePasswordDto, BookingHistoryDto} from '@/types';
+import {
+    Button,
+    Card,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Modal,
+    notification,
+    NotificationArgsProps,
+    Space,
+    Spin,
+    TableProps
+} from "antd"; // Adjusted path
 type NotificationPlacement = NotificationArgsProps['placement'];
 import {Typography} from 'antd';
+import {formatDateTime, formatRupiah} from "@/utils/helpers";
+import StatusTag from "@/components/StatusTag";
 
 const {Title} = Typography;
 
@@ -172,6 +187,44 @@ const UserAccountPage: FC = () => {
     //         setConfirmLoading(false);
     //     }, 2000);
     // };
+
+    const  columns : TableProps<BookingHistoryDto>['columns']=[
+        {
+            title : 'Item Name',
+            dataIndex : 'nama_Barang',
+            key: 'nama_Barang',
+        },
+
+        {
+            title : 'Time of Booking',
+            key: 'timeofBooking',
+            render: (_, record) => (
+                <span>
+                    {`${formatDateTime(record.start_Date)} - ${formatDateTime(record.end_Date)}`}
+                </span>
+            ),
+        },
+
+        {
+            title : 'Status',
+            dataIndex : 'status_Peminjaman',
+            key: 'status_Peminjaman',
+            render: (status) => <StatusTag status={status ?? ""} />,
+        },
+
+        {
+            title : 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <button
+                    onClick={() => alert(`Viewing details for booking ID: ${record.id_Peminjaman}\nReason: ${record.deskripsi || 'N/A'}\nFine: ${formatRupiah(record.denda)}`)}
+                    className="text-blue-600 hover:underline text-sm bg-transparent border-none p-0 cursor-pointer"
+                >
+                    View Details
+                </button>
+            ),
+        }
+    ];
 
     const handleCancel = () => {
         console.log('Clicked cancel button');

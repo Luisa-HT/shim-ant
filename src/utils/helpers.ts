@@ -1,5 +1,7 @@
 // ClientApp/src/utils/helpers.ts
 
+import {NotificationInstance, NotificationPlacement} from "antd/es/notification/interface";
+
 /**
  * Formats a date string into a localized date string.
  * @param dateString The date string (e.g., ISO 8601).
@@ -17,6 +19,48 @@ export const formatDate = (dateString?: string | null): string => {
     }
 };
 
+export type NotificationType = "open" | "success" | "error" | "info" | "warning";
+
+
+export const callNotificationApi = (api: NotificationInstance, placement: NotificationPlacement, type: NotificationType, message: string, description: string) => {
+    switch (type) {
+        case "open":
+            api.open({
+                message,
+                description,
+                placement,
+            })
+            break;
+        case "success":
+            api.success({
+                message,
+                description,
+                placement,
+            })
+            break;
+        case "error":
+            api.error({
+                message,
+                description,
+                placement,
+            })
+            break;
+        case "info":
+            api.info({
+                message,
+                description,
+                placement,
+            })
+            break;
+        case "warning":
+            api.warning({
+                message,
+                description,
+                placement,
+            })
+            break;
+    }
+};
 /**
  * Formats a date string into a localized date and time string.
  * @param dateTimeString The date-time string (e.g., ISO 8601).
